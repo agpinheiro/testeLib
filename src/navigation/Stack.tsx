@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Animated,
   BackHandler,
@@ -9,7 +9,7 @@ import {
   StyleSheet,
 } from 'react-native';
 
-const {width} = Dimensions.get('window');
+// const { width } = Dimensions.get('window');
 
 export interface StackProps {
   pages: Page[];
@@ -29,10 +29,10 @@ export interface NavProps {
   };
 }
 
-const Stack: React.FC<StackProps> = ({pages, initialPage}) => {
+const Stack: React.FC<StackProps> = ({ pages, initialPage }) => {
   const [page, setPage] = useState<string>(initialPage || pages[0].title);
   const [pageStack, setPageStack] = useState<string[]>([initialPage]);
-  const [translateX, setTranslateX] = useState(new Animated.Value(0));
+  // const [translateX, setTranslateX] = useState(new Animated.Value(0));
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
@@ -50,7 +50,7 @@ const Stack: React.FC<StackProps> = ({pages, initialPage}) => {
       const previousPage = pageStack[pageStack.length - 2];
       setPageStack(oldStack => oldStack.slice(0, -1));
       setPage(previousPage);
-      animateTransition(-width);
+      // animateTransition(-width);
     }
   };
 
@@ -63,19 +63,19 @@ const Stack: React.FC<StackProps> = ({pages, initialPage}) => {
       const filtered = oldStack.filter(item => item !== value);
       return [...filtered, value];
     });
-    animateTransition(width);
+    // animateTransition(width);
   };
 
-  const animateTransition = (toValue: number) => {
+/*   const animateTransition = (toValue: number) => {
     Animated.timing(translateX, {
       toValue,
       duration: 300,
       easing: Easing.inOut(Easing.ease),
       useNativeDriver: true,
-    }).start(({finished}) => {
+    }).start(({ finished }) => {
       finished && setTranslateX(new Animated.Value(0));
     });
-  };
+  }; */
 
   const handleBackPress = () => {
     if (pageStack.length > 1) {
@@ -91,15 +91,14 @@ const Stack: React.FC<StackProps> = ({pages, initialPage}) => {
         const isActive = item.title === page;
         return (
           isActive && (
-            <Animated.View style={[styles.container]} key={item.title}>
-              <item.page
-                navigation={{
-                  navigate: navigateToPage,
-                  goBack: goBack,
-                  pageName: item.title,
-                }}
-              />
-            </Animated.View>
+            <item.page
+              key={item.title}
+              navigation={{
+                navigate: navigateToPage,
+                goBack: goBack,
+                pageName: item.title,
+              }}
+            />
           )
         );
       })}
