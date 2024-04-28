@@ -3,8 +3,8 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {NavProps} from '../navigation/Stack';
 
 const Login: React.FC<NavProps> = ({navigation}) => {
-  const navigationToHome = () => {
-    navigation.navigate('Home');
+  const navigationToNFC = () => {
+    navigation.navigate('NFC');
   };
 
   const goBack = () => {
@@ -13,7 +13,7 @@ const Login: React.FC<NavProps> = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={navigationToHome}>
+      <TouchableOpacity onPress={navigationToNFC}>
         <Text style={styles.text}>LOGIN</Text>
       </TouchableOpacity>
       <View style={{marginTop: 20}} />

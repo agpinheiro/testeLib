@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {NavProps} from '../navigation/Stack';
+import NfcManager, {NfcTech} from 'react-native-nfc-manager';
 
 const Home: React.FC<NavProps> = ({navigation}) => {
-  const navigationToLogin = () => {
-    navigation.navigate('Login2');
+  const navigationToNFC = () => {
+    navigation.navigate('NFC');
   };
 
   const goBack = () => {
@@ -13,7 +14,7 @@ const Home: React.FC<NavProps> = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={navigationToLogin}>
+      <TouchableOpacity onPress={navigationToNFC}>
         <Text style={styles.text}>HOME</Text>
       </TouchableOpacity>
 
@@ -21,6 +22,7 @@ const Home: React.FC<NavProps> = ({navigation}) => {
       <TouchableOpacity onPress={goBack}>
         <Text style={styles.text}>Voltar</Text>
       </TouchableOpacity>
+      <View style={{marginTop: 200}} />
     </View>
   );
 };
