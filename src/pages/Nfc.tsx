@@ -70,6 +70,7 @@ const NFC: React.FC<NavProps> = ({ navigation }) => {
 
 
     async function readNdef() {
+        if(!state.isSupported) return
         attState({ key: 'status', value: 'Buscando!' })
         attState({ key: 'tag', value: null })
         try {
@@ -91,6 +92,7 @@ const NFC: React.FC<NavProps> = ({ navigation }) => {
     }
 
     async function writeNdef() {
+        if(!state.isSupported) return
         let result = false;
 
         try {
