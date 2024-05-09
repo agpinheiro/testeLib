@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {NavProps} from '../navigation/Stack';
-import NfcManager, {NfcTech} from 'react-native-nfc-manager';
+import Overlay from '../components/Overlay';
 
 const Home: React.FC<NavProps> = ({navigation}) => {
+
+  const [visible, setVisible] = useState(false)
+
   const navigationToNFC = () => {
     navigation.navigate('NFC');
   };
@@ -14,7 +17,7 @@ const Home: React.FC<NavProps> = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={navigationToNFC}>
+      <TouchableOpacity onPress={() => setVisible(true)}>
         <Text style={styles.text}>HOME</Text>
       </TouchableOpacity>
 
@@ -23,6 +26,11 @@ const Home: React.FC<NavProps> = ({navigation}) => {
         <Text style={styles.text}>Voltar</Text>
       </TouchableOpacity>
       <View style={{marginTop: 200}} />
+      <Overlay orientation='top' visible={visible} setVisible={setVisible}>
+        <View style={{width: 300, height: 100, backgroundColor: 'white', borderRadius: 10}}>
+          <Text>ASDASD</Text>
+        </View>
+      </Overlay>
     </View>
   );
 };

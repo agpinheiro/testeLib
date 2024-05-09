@@ -17,7 +17,7 @@ const Routes = () => {
 
   return (
     <NavigatorContainer>
-      <Stack initialPage="NFC" pages={pages} />
+      <Stack initialPage="Home" pages={pages} />
     </NavigatorContainer>
   );
 };
