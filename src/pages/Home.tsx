@@ -39,7 +39,7 @@ const Home: React.FC<NavProps> = ({ navigation }) => {
       </TouchableOpacity>
 
       <View style={{ width: '100%', paddingHorizontal: 30, gap: 30 }}>
-        <Input textInputColor='white' backgroundColor='#999' borderColor='#5900ff' titleColor={['black', 'white']} title='Teste' onChangeText={() => { }} />
+        <Input keyboardType='decimal-pad' mask='cpf' textInputColor='white' backgroundColor='#999' borderColor='#5900ff' titleColor={['black', 'white']} title='Teste' onChangeText={() => { }} />
       </View>
       <Overlay orientation='top' visible={visible} setVisible={setVisible}>
         <View style={{ width: 300, height: 100, backgroundColor: 'white', borderRadius: 10 }}>

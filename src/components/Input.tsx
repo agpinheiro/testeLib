@@ -26,7 +26,7 @@ interface InputProps {
     styleContainer?: StyleProp<ViewStyle>;
     message?: string;
     colorMessage?: ColorValue;
-    type?: KeyboardTypeOptions | undefined;
+    keyboardType?: KeyboardTypeOptions | undefined;
     maxLength?: number;
     capitalize?: 'none' | 'sentences';
     textArea?: boolean;
@@ -48,7 +48,7 @@ const Input: React.FC<InputProps> = React.memo(({
     title,
     titleColor = ['#333', '#000'],
     styleContainer,
-    type,
+    keyboardType,
     maxLength,
     capitalize = 'sentences',
     textArea = false,
@@ -122,7 +122,7 @@ const Input: React.FC<InputProps> = React.memo(({
                     secureTextEntry={show}
                     multiline={textArea}
                     autoCapitalize={capitalize}
-                    keyboardType={type}
+                    keyboardType={keyboardType}
                     value={handleValue()}
                     onFocus={() => { setFocus(true); handleAnimation(1); }}
                     maxLength={maxLength}
