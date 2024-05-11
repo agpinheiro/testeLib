@@ -85,7 +85,7 @@ const Input: React.FC<InputProps> = React.memo(({
     const handleAnimation = useCallback((value: 0 | 1) => {
         Animated.timing(titleAnimation, {
             toValue: value,
-            duration: 600,
+            duration: 100,
             useNativeDriver: true,
             easing: Easing.linear
         }).start();

@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     },
     containerView: {
         flex: 1,
-        backgroundColor: 'black'
+        backgroundColor: 'black',
     },
     animationContainer: {
         position: 'absolute',
