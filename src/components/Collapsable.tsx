@@ -1,48 +1,75 @@
-import React, { useCallback, useRef, useState } from 'react';
-import { Animated, Easing, LayoutChangeEvent, Pressable, StyleProp, Text, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
+import React, { useCallback, useRef, useState } from 'react'
+import {
+  Animated,
+  Easing,
+  type LayoutChangeEvent,
+  type StyleProp,
+  TouchableOpacity,
+  View,
+  type ViewStyle,
+} from 'react-native'
 
 interface CollapsableProps {
-    title: string;
-    titleStyle: StyleProp<TextStyle>;
-    content: string;
-    contentStyle: StyleProp<TextStyle>;
-    containerStyle: StyleProp<ViewStyle>
+  title: React.JSX.Element
+  content: React.JSX.Element
+  containerStyle?: StyleProp<ViewStyle>
+  buttonTitleStyle?: StyleProp<ViewStyle>
+  onCurrentValue?: (value: boolean) => void;
+  duration?: number;
 }
 
-const Collapsable: React.FC<CollapsableProps> = ({ title, content, contentStyle, titleStyle, containerStyle }) => {
-    const [isCollapsed, setIsCollapsed] = useState(false)
-    const collapsableAnimation = useRef(new Animated.Value(0)).current;
-    const [collapsedHeight, setCollapsedHeight] = useState(10)
-    const heightCollapsable = collapsableAnimation.interpolate({
-        inputRange: [0, 1],
-        outputRange: [0, collapsedHeight],
-    })
+const Collapsable: React.FC<CollapsableProps> = ({
+  title,
+  content,
+  containerStyle,
+  buttonTitleStyle,
+  onCurrentValue,
+  duration = 300,
+}) => {
+  const collapsed = useRef(false)
+  const collapsableAnimation = useRef(new Animated.Value(0)).current
+  const [collapsedHeight, setCollapsedHeight] = useState(10)
+  const heightCollapsable = collapsableAnimation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, collapsedHeight],
+  })
 
-    const handleAnimation = (value: 0 | 1) => {
-        Animated.timing(collapsableAnimation, {
-            toValue: value,
-            duration: 300,
-            useNativeDriver: false,
-            easing: Easing.linear
-        }).start();
-        setIsCollapsed(!isCollapsed)
-    };
-    const onTextLayout = useCallback((event: LayoutChangeEvent) => {
-        const { height: h } = event.nativeEvent.layout;
-        setCollapsedHeight(h + 10)
-    }, [collapsedHeight]);
+  const handleAnimation = useCallback(async (value: 0 | 1) => {
+    collapsed.current = !collapsed.current;
+    Animated.timing(collapsableAnimation, {
+      toValue: value,
+      duration: duration,
+      useNativeDriver: false,
+      easing: Easing.linear,
+    }).start(() => {
+      onCurrentValue && onCurrentValue(collapsed.current)
+    });
+  }, [duration]);
 
-    return (
-        <View style={containerStyle}>
-            <TouchableOpacity onPress={() => isCollapsed ? handleAnimation(0) : handleAnimation(1)} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={titleStyle}>{title}</Text>
-                <Text style={titleStyle}>{isCollapsed ? '➖' : '➕'}</Text>
-            </TouchableOpacity>
-            <Animated.View style={{ overflow: 'hidden', height: heightCollapsable }}>
-                <Text onLayout={onTextLayout} style={contentStyle}>{content}</Text>
-            </Animated.View>
-        </View>
-    );
+
+  const onTextLayout = (event: LayoutChangeEvent) => {
+    setCollapsedHeight(Math.round(event.nativeEvent.layout.height) + 13)
+  }
+
+
+  const callAnimation = async () => {
+    collapsed.current ? handleAnimation(0) : handleAnimation(1)
+  }
+
+
+  return (
+    <View style={containerStyle}>
+      <TouchableOpacity
+        onPress={callAnimation}
+        style={buttonTitleStyle}
+      >
+        {title}
+      </TouchableOpacity>
+      <Animated.View style={{ overflow: 'hidden', height: heightCollapsable }}>
+        <View onLayout={onTextLayout}>{content}</View>
+      </Animated.View>
+    </View>
+  )
 }
 
-export default Collapsable;
+export default Collapsable

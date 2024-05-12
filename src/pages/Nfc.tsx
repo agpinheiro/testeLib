@@ -70,14 +70,14 @@ const NFC: React.FC<NavProps> = ({ navigation }) => {
 
 
     async function readNdef() {
-        if(!state.isSupported) return
+        if (!state.isSupported) return
         attState({ key: 'status', value: 'Buscando!' })
         attState({ key: 'tag', value: null })
         try {
             await NfcManager.requestTechnology([NfcTech.NfcA, NfcTech.NfcF]);
             const tag = await NfcManager.getTag();
 
-            if(tag?.ndefMessage && tag.ndefMessage.length > 0) {
+            if (tag?.ndefMessage && tag.ndefMessage.length > 0) {
                 const payloadString = Ndef.util.bytesToString(tag.ndefMessage[0].payload);
                 setMessage(payloadString)
             }
@@ -92,7 +92,7 @@ const NFC: React.FC<NavProps> = ({ navigation }) => {
     }
 
     async function writeNdef() {
-        if(!state.isSupported) return
+        if (!state.isSupported) return
         let result = false;
 
         try {

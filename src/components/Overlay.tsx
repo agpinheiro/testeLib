@@ -58,12 +58,26 @@ const Overlay: React.FC<OverlayProps> = ({ children, visible, setVisible, orient
     }, []);
 
     const handleTransform = orientation === 'left' || orientation === 'right' ?
-        [{ translateX: visibleAnimation.interpolate({ inputRange: [0, 1], outputRange: [animation[orientation].initial, animation[orientation].final] }) }, { translateY: height * 0.5 - viewSize.height * 0.5 }] :
-        [{ translateY: visibleAnimation.interpolate({ inputRange: [0, 1], outputRange: [animation[orientation].initial, animation[orientation].final] }) }];
+        [{
+            translateX: visibleAnimation.interpolate({
+                inputRange: [0, 1],
+                outputRange: [animation[orientation].initial, animation[orientation].final]
+            })
+        }, {
+            translateY: height * 0.5 - viewSize.height * 0.5
+        }] :
+        [{
+            translateY: visibleAnimation.interpolate({
+                inputRange: [0, 1],
+                outputRange: [animation[orientation].initial, animation[orientation].final]
+            })
+        }];
 
     return (
         <Modal visible={visible} transparent style={styles.containerOverlay}>
-            <Animated.View onTouchEnd={handleBackgroundPress} style={[styles.containerView, { opacity: visibleAnimation.interpolate({ inputRange: [0, 1], outputRange: [0, 0.6] }) }]} />
+            <Animated.View
+                onTouchEnd={handleBackgroundPress}
+                style={[styles.containerView, { opacity: visibleAnimation.interpolate({ inputRange: [0, 1], outputRange: [0, 0.6] }) }]} />
             <Animated.View style={[{ transform: handleTransform }, styles.animationContainer]}>
                 <View onLayout={onViewLayout}>
                     {children}
