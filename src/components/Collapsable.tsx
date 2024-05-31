@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import {
   Animated,
   Easing,
@@ -28,13 +28,15 @@ const Collapsable: React.FC<CollapsableProps> = ({
 }) => {
   const collapsed = useRef(false)
   const collapsableAnimation = useRef(new Animated.Value(0)).current
-  const [collapsedHeight, setCollapsedHeight] = useState(10)
+  const [measuredHeight, setMeasuredHeight] = useState<number | null>(null)
+  const viewRef = useRef<View>(null)
+
   const heightCollapsable = collapsableAnimation.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, collapsedHeight],
+    outputRange: [0, measuredHeight || 0],
   })
 
-  const handleAnimation = useCallback(async (value: 0 | 1) => {
+  const handleAnimation = useCallback((value: 0 | 1) => {
     collapsed.current = !collapsed.current;
     Animated.timing(collapsableAnimation, {
       toValue: value,
@@ -44,18 +46,16 @@ const Collapsable: React.FC<CollapsableProps> = ({
     }).start(() => {
       onCurrentValue && onCurrentValue(collapsed.current)
     });
-  }, [duration]);
+  }, [duration, measuredHeight, onCurrentValue, collapsableAnimation]);
 
-
-  const onTextLayout = (event: LayoutChangeEvent) => {
-    setCollapsedHeight(Math.round(event.nativeEvent.layout.height) + 13)
-  }
-
-
-  const callAnimation = async () => {
+  const callAnimation = () => {
     collapsed.current ? handleAnimation(0) : handleAnimation(1)
   }
 
+  const onContentLayout = (event: LayoutChangeEvent) => {
+    const { height } = event.nativeEvent.layout
+    setMeasuredHeight(Math.round(height))
+  }
 
   return (
     <View style={containerStyle}>
@@ -65,9 +65,21 @@ const Collapsable: React.FC<CollapsableProps> = ({
       >
         {title}
       </TouchableOpacity>
-      <Animated.View style={{ overflow: 'hidden', height: heightCollapsable }}>
-        <View onLayout={onTextLayout}>{content}</View>
-      </Animated.View>
+      {measuredHeight !== null ? (
+        <Animated.View style={{ height: heightCollapsable, overflow: 'hidden' }}>
+          <View>
+            {content}
+          </View>
+        </Animated.View>
+      ) : (
+        <View
+          ref={viewRef}
+          style={{ position: 'absolute', opacity: 0 }}
+          onLayout={onContentLayout}
+        >
+          {content}
+        </View>
+      )}
     </View>
   )
 }
